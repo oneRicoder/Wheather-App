@@ -20,6 +20,8 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity : AppCompatActivity() {
@@ -71,6 +73,7 @@ class MainActivity : AppCompatActivity() {
             val mLastLocation: Location = locationResult.lastLocation
             val latitude = mLastLocation.latitude
             val longitude = mLastLocation.longitude
+            getLocationWeatherDetail()
         }
     }
 
@@ -98,5 +101,15 @@ class MainActivity : AppCompatActivity() {
     private fun isLocationEnabled(): Boolean{
         val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    private fun getLocationWeatherDetail(){
+        if (Constants.isInternetAvailable(this)){
+            //Toast.makeText(this,"You are connected to the internet",Toast.LENGTH_SHORT).show()
+            val retrofit: Retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build()
+
+        }else{
+            Toast.makeText(this,"No Internet Connection!",Toast.LENGTH_SHORT).show()
+        }
     }
 }
